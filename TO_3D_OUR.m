@@ -21,8 +21,8 @@
 %                                                                          %
 % The code as well as a postscript version of the paper can be             %
 % downloaded from the web-site:                                            %
-% http://arxiv.org/abs/2001.01896                                          %
-% http://https://github.com/zengzhi2015/HEFDiM-preview-version             %
+% https://arxiv.org/abs/2001.01896                                         %
+% https://github.com/zengzhi2015/HEFDiM-preview-version                    %
 %                                                                          %
 % Disclaimer:                                                              %
 % The authors reserves all rights but do not guaranty that the code is     %

@@ -7,7 +7,7 @@ An Efficient Gradient Projection Method for Structural Topology Optimization (Pr
 
 ## Force inverter mechanism [(CODE)](./MSE_SE_KO.m):
 
-![Force inverter](./MSE_SE_KO_NEW.gif)
+![Force inverter](./MSE_SE_100_100_OUR_NEW.gif)
 
 ## 3D cantilever beam [(CODE)](./TO_3D_OUR.m):
 

@@ -8,9 +8,9 @@
 %                                                                          %
 % The code is intended for educational purposes and theoretical details    %
 % are discussed in the paper                                               %
-% "Highly Efficient Feasible Direction Method (HEFDiM) for Structural      %
-%  Topology Optimization",                                                 %
-% Zhi Zeng and Fulei Ma, submitting to Struct Multidisc Optim, 2020        %
+% "An Efficient Gradient Projection Method for Structural Topology         %
+%  Optimization",                                                          %
+% Zhi Zeng and Fulei Ma, 2020                                              %
 %                                                                          %
 % This version is based on earlier 99-line code                            %
 % by Ole Sigmund (2001), Structural and Multidisciplinary Optimization,    %
@@ -19,10 +19,8 @@
 % E. Andreassen, A. Clausen, M. Schevenels,                                %
 % B. S. Lazarov and O. Sigmund, Struct Multidisc Optim, 2010               %
 %                                                                          %
-% The code as well as a postscript version of the paper can be             %
-% downloaded from the web-site:                                            %
-% https://arxiv.org/abs/2001.01896                                         %
-% https://github.com/zengzhi2015/HEFDiM-preview-version                    %
+% The code a can be downloaded from the web-site:                          %
+% http://https://github.com/zengzhi2015/EGP-preview-version                %
 %                                                                          %
 % Disclaimer:                                                              %
 % The authors reserves all rights but do not guaranty that the code is     %
@@ -83,6 +81,7 @@ while ~(sum(abs(change),'all') <= 1e-2 || loop>=loop_limit)
     loop = loop + 1;
     xPhys = imgaussfilt(xPhys,rmin*0.5);
     [c,dc] = FEA(KE,xPhys,Emin,E0,nelx,nely,iK,jK,freedofs,edofMat,penal,F);
+    dc = sign(dc).*min(mean(abs(dc),'all')*5,abs(dc));
     dc = imgaussfilt(dc,rmin);
     %% Modify large and small values to avoid the zero step problem
     xPhys = non_zeros_max_step_guarrentee(xPhys,volfrac,Emin);

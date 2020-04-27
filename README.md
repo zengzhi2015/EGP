@@ -1,4 +1,4 @@
-# EGP-preview-version
+# EGP
 An Efficient Gradient Projection Method for Structural Topology Optimization (Preview Version)
 
 ## The MBB problem [(CODE)](./MBB_300_100_OUR.m):

@@ -29,19 +29,18 @@
 % for educational purposes. For commercial usage, please contact the       %
 % authors.                                                                 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
 close all
 clear
 clc
 %%
-nelx=150;
-nely=50;
+nelx=300;
+nely=100;
 total = nely*nelx;
 volfrac=0.5;
 Node_Number_Force_Applied_x=1;
 Node_Number_Force_Applied_y=1;
 Angle_of_Force=-pi/2;
-loop_limit=50;
+loop_limit=100;
 xPhys_init = ones(nely,nelx)*volfrac;
 
 Node_Number_Force_Applied = (Node_Number_Force_Applied_x)*(nely+1)+Node_Number_Force_Applied_y;
@@ -49,7 +48,7 @@ X_Force = cos(Angle_of_Force);
 Y_Force =sin(Angle_of_Force);
 
 penal=3.0;
-rmin=2.5;
+rmin=5.0;
 %% MATERIAL PROPERTIES
 E0 = 1;
 Emin = 1e-9;
@@ -77,7 +76,7 @@ loop = 0;
 change = ones(nelx,nely);
 %% START ITERATION
 fig = figure;
-while ~(sum(abs(change),'all') <= 1e-2 || loop>=loop_limit)
+while ~(mean(abs(change),'all') <= 2e-3 || loop>=loop_limit)
     loop = loop + 1;
     xPhys = imgaussfilt(xPhys,rmin*0.5);
     [c,dc] = FEA(KE,xPhys,Emin,E0,nelx,nely,iK,jK,freedofs,edofMat,penal,F);
@@ -85,7 +84,7 @@ while ~(sum(abs(change),'all') <= 1e-2 || loop>=loop_limit)
     dc = imgaussfilt(dc,rmin);
     %% Modify large and small values to avoid the zero step problem
     xPhys = non_zeros_max_step_guarrentee(xPhys,volfrac,Emin);
-    %% Check the confliction (Recursive) (Algorithm 1)
+    %% Check the confliction (Recursive)
     dc_modified = dc;
     confliction_flag = (xPhys(:)==1)>10;
     cnt_add = 1;
@@ -132,12 +131,13 @@ while ~(sum(abs(change),'all') <= 1e-2 || loop>=loop_limit)
     reshape_dc_modified = reshape(dc_modified,nely,nelx);
     modification = opt_step*reshape_dc_modified;
     xPhys = xPhys+modification;
-    change = max(abs(xPhys(:)-x(:)));
+    change = xPhys(:)-x(:);
     x = xPhys;
     %% PRINT RESULTS
     fprintf('It:%3i|Obj:%8.4f|Vol:%5.3f|dc:%8.3f|dcm:%8.3f|ch:%6.3f|ms:%e|os:%e\n', ...
-      loop,full(c),mean(xPhys(:)),sum(full(abs(dc)),'all'),sum(full(abs(dc_modified)),'all'),sum(full(abs(change)),'all'),max_steps,opt_step);
+      loop,full(c),mean(xPhys(:)),sum(full(abs(dc)),'all'),sum(full(abs(dc_modified)),'all'),mean(full(abs(change)),'all'),max_steps,opt_step);
     %% PLOT DENSITIES
+    %figure(1)
     colormap(gray); imagesc(1-xPhys); caxis([0 1]); axis equal; axis off; drawnow;
 end
 

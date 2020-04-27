@@ -79,14 +79,14 @@ loop = 0;
 change = ones(nely,nelx,nelz);
 %% START ITERATION
 fig = figure;
-while ~(sum(abs(change),'all') <= tolx || loop>=maxloop)
+while ~(mean(abs(change),'all') <= 2e-3 || loop>=maxloop)
     loop = loop + 1;
     xPhys = imgaussfilt3(xPhys,rmin/2);
     [c,dc] = FEA_revised(KE,xPhys,Emin,E0,nelx,nely,nelz,iK,jK,freedofs,edofMat,penal,F);
     dc = sign(dc).*min(mean(abs(dc),'all')*5,abs(dc));
     dc = imgaussfilt3(dc,rmin);
     %% Modify large and small values to avoid the zero step problem
-    xPhys = non_zeros_max_step_guarrentee(xPhys,volfrac,Emin);
+    xPhys = non_zeros_max_step_guarrentee_3D(xPhys,volfrac,Emin);
     %% Check the confliction (Recursive) (Algorithm 1)
     dc_modified = dc;
     confliction_flag = (xPhys(:)==1)>10;
@@ -134,11 +134,11 @@ while ~(sum(abs(change),'all') <= tolx || loop>=maxloop)
     reshape_dc_modified = reshape(dc_modified,[nely,nelx,nelz]);
     modification = opt_step*reshape_dc_modified;
     xPhys = xPhys+modification;
-    change = max(abs(xPhys(:)-x(:)));
+    change = xPhys(:)-x(:);
     x = xPhys;
     %% PRINT RESULTS
     fprintf('It:%3i|Obj:%8.4f|Vol:%5.3f|dc:%8.3f|dcm:%8.3f|ch:%6.3f|ms:%e|os:%e\n', ...
-      loop,full(c),mean(xPhys(:)),sum(full(abs(dc)),'all'),sum(full(abs(dc_modified)),'all'),sum(full(abs(change)),'all'),max_steps,opt_step);
+      loop,full(c),mean(xPhys(:)),sum(full(abs(dc)),'all'),sum(full(abs(dc_modified)),'all'),mean(full(abs(change)),'all'),max_steps,opt_step);
 end
 clf; display_3D(xPhys);
 

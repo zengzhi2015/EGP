@@ -91,7 +91,7 @@ loop = 0;
 change = ones(nelx,nely);
 %% START ITERATION
 fig = figure;
-while ~(sum(abs(change),'all') <= 1e-2 || loop>=loop_limit)
+while ~(mean(abs(change),'all') <= 5e-4 || loop>=loop_limit)
   loop = loop + 1;
   xPhys = imclose(xPhys,strel('disk',1));
   [c,dc] = FEA_Sigmud(KE,xPhys,Emin,E0,nelx,nely,iK,jK,freedofs,edofMat,penal,F,F1);
@@ -144,11 +144,11 @@ while ~(sum(abs(change),'all') <= 1e-2 || loop>=loop_limit)
     reshape_dc_modified = reshape(dc_modified,nely,nelx);
     modification = opt_step*reshape_dc_modified;
     xPhys = xPhys+modification;
-    change = max(abs(xPhys(:)-x(:)));
+    change = xPhys(:)-x(:);
     x = xPhys;
   %% PRINT RESULTS
   fprintf('It:%3i|Obj:%8.4f|Vol:%5.3f|dc:%8.3f|dcm:%8.3f|ch:%6.3f|ms:%7.7f|os:%7.7f\n', ...
-      loop,full(c),mean(xPhys(:)),sum(full(abs(dc)),'all'),sum(full(abs(dc_modified)),'all'),sum(full(abs(change)),'all'),max_steps,opt_step);
+      loop,full(c),mean(xPhys(:)),sum(full(abs(dc)),'all'),sum(full(abs(dc_modified)),'all'),mean(full(abs(change)),'all'),max_steps,opt_step);
   %% PLOT DENSITIES
   colormap(gray); imagesc(1-xPhys); caxis([0 1]); axis equal; axis off; drawnow;
 end

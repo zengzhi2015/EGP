@@ -49,7 +49,7 @@ X_Force = cos(Angle_of_Force);
 Y_Force =sin(Angle_of_Force);
 
 penal=3.0;
-rmin=2.0;
+rmin=2.5;
 %% MATERIAL PROPERTIES
 E0 = 1;
 Emin = 1e-9;

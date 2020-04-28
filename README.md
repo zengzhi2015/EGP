@@ -1,6 +1,8 @@
 # EGP
 An Efficient Gradient Projection Method for Structural Topology Optimization (Preview Version)
 
+*Note:To run the code properly, please using MATLAB 2019 and later. Or several functions may cause errors*
+
 ## The MBB problem [(CODE)](./MBB_300_100_OUR.m):
 
 ![MBB](./MBB_300_100_OUR_NEW.gif)

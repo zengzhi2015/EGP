@@ -2,7 +2,7 @@
 
 ### An Efficient Gradient Projection Method for Structural Topology Optimization
 
-*Note:To run the code properly, please using MATLAB 2019 or later. Otherwise, several functions may encounter errors.*
+*Note: To run the code properly, please using MATLAB 2019 or later. Otherwise, several functions may encounter errors.*
 
 ## The MBB problem [(CODE)](./MBB_300_100_OUR.m):
 

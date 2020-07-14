@@ -1,6 +1,6 @@
 %% Modify the xPhys to solve the split-stepping numerical problem
 function new_xPhys=non_zeros_max_step_guarrentee(xPhys,volfrac,Emin)
-    gap_min = 0.3; % This should not be smaller than the fraction
+    gap_min = 0.3; % This should not be larger than the fraction; Reduce this value if the convergence is not stable.
     if gap_min>=volfrac
         gap_min = volfrac*0.75;
     end
